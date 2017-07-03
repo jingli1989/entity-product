@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 实体信息查询服务
@@ -20,16 +21,35 @@ import java.util.List;
 @Service
 public class QueryEntityService {
     /** 表信息数据库查询服务 */
-    @Autowired
-    private TableColumnInfoMapper tableColumnInfoMapper;
+    private final TableColumnInfoMapper tableColumnInfoMapper;
     /** 数据库配置 */
+    private final DbTableConfig dbTableConfig;
+
     @Autowired
-    private DbTableConfig dbTableConfig;
-
-    public void getEntityInfo(){
-
+    public QueryEntityService(DbTableConfig dbTableConfig, TableColumnInfoMapper tableColumnInfoMapper) {
+        this.dbTableConfig = dbTableConfig;
+        this.tableColumnInfoMapper = tableColumnInfoMapper;
     }
 
+    /**
+     * 根据配置信息获取配置的数据库中表信息
+     * @return 表信息
+     */
+    public List<EntityInfo> getEntity(){
+        Map<String,List<String>> map = dbTableConfig.getDbTableInfo();
+        List<EntityInfo> result = new ArrayList<EntityInfo>();
+        for (String dbName:map.keySet()){
+            result.addAll(queryEntity(dbName,map.get(dbName)));
+        }
+        return result;
+    }
+
+    /**
+     * 根据数据库名称和表名称集合查询表信息
+     * @param dbName 数据库名称
+     * @param tableNameList 表名集合
+     * @return 表信息
+     */
     private List<EntityInfo> queryEntity(String dbName,List<String> tableNameList){
         if(tableNameList==null||tableNameList.isEmpty()){
             return queryAllByDB(dbName);
@@ -69,6 +89,7 @@ public class QueryEntityService {
                 result.add(queryColumnInfo(dbName,tableInfoDto));
             }
         }
+        return result;
     }
 
     /**
