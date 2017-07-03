@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lijing.entity.dal.mapper.TableColumnInfoMapper" >
+  <resultMap id="TableResult" type="com.lijing.entity.dal.dto.TableInfoDto" >
+    <result column="TABLE_SCHEMA"  property="tableSchema"   jdbcType="VARCHAR" />
+    <result column="TABLE_NAME"    property="tableName"     jdbcType="VARCHAR" />
+    <result column="TABLE_COMMENT" property="tableComment"  jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="ColumnResult" type="com.lijing.entity.dal.dto.ColumnInfoDto" >
+    <result column="column_name"              property="columnName"    jdbcType="VARCHAR" />
+    <result column="column_comment"           property="columnComment" jdbcType="VARCHAR" />
+    <result column="data_type"                property="dataType"      jdbcType="VARCHAR" />
+    <result column="character_maximum_length" property="maxLength"     jdbcType="BIGINT" />
+  </resultMap>
+
+  <!--查询表信息-->
+  <select id="selectTable" resultMap="TableResult" parameterType="Map" >
+    SELECT
+    TABLE_SCHEMA,TABLE_NAME,TABLE_COMMENT
+    FROM information_schema.TABLES
+    WHERE TABLE_SCHEMA = #{tableSchema,jdbcType=VARCHAR}
+    <if test="tableName != null" >
+      AND TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <!--查询表中字段信息-->
+  <select id="selectColumn" resultMap="ColumnResult" parameterType="Map" >
+    SELECT
+    column_name,column_comment,data_type,character_maximum_length
+    FROM information_schema.columns
+    WHERE TABLE_SCHEMA = #{tableSchema,jdbcType=VARCHAR}
+    AND TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+  </select>
+</mapper>

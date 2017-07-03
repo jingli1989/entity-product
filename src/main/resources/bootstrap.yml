@@ -1,0 +1,26 @@
+#
+#spring:
+#  application:
+#    name: spider-manager
+#  cloud:
+#    consul:
+#      host: 10.0.23.74
+#      port: 8500
+#      enabled: true
+#      config:
+#        enabled: true
+##        prefix: test-spring
+#        default-context: spider-manager/app
+#        profile-separator: ','
+#        format: FILES
+#      discovery:
+#        enabled: true
+#        instanceId: spider-manager
+#        serviceName: spider-manager
+#        hostname: localhost
+#        port: ${server.port}
+#        healthCheckUrl: http://localhost:${server.port}/${spring.application.name}/health
+#        healthCheckInterval: 15s
+#        tags: dev
+#server:
+#  port: 2088
