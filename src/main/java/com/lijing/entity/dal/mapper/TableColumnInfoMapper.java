@@ -18,7 +18,7 @@ public interface TableColumnInfoMapper {
      * @param tableName 表名
      * @return 表信息
      */
-    List<TableInfoDto> selectTable(@Param(value = "dbName")String dbName, @Param(value = "tableName")String tableName);
+    List<TableInfoDto> selectTable(@Param(value = "tableSchema")String dbName, @Param(value = "tableName")String tableName);
 
     /**
      * 根据数据库名称、表名称获取表字段信息
@@ -26,6 +26,6 @@ public interface TableColumnInfoMapper {
      * @param tableName 表名称
      * @return 字段信息
      */
-    List<ColumnInfoDto> selectColumn(@Param(value = "dbName")String dbName, @Param(value = "tableName")String tableName);
+    List<ColumnInfoDto> selectColumn(@Param(value = "tableSchema")String dbName, @Param(value = "tableName")String tableName);
 
 }

@@ -11,14 +11,28 @@ public class ColumnUtils {
      * @param columnName 列名
      * @return 属性名
      */
-    public static String columnRecharnge(String columnName){
-        columnName = columnName.toLowerCase();
-        String[] cls = columnName.split("_");
+    public static String columnRecharge(String columnName){
+        columnName = tableRecharge(columnName);
+        char[] cs = columnName.toCharArray();
+        cs[0] += 32;
+        String propertyName="";
+        propertyName += String.valueOf(cs);
+        return propertyName;
+    }
+
+    /**
+     * 带下划线的列信息转换为驼峰属性
+     * @param tableName 表名
+     * @return className
+     */
+    public static String tableRecharge(String tableName){
+        tableName = tableName.toLowerCase();
+        String[] cls = tableName.split("_");
         String propertyName = "";
-        for (String str:cls){
-            char[] cs=str.toCharArray();
-            cs[0]-=32;
-            propertyName +=String.valueOf(cs);
+        for (int i = 0; i < cls.length; i++) {
+            char[] cs = cls[i].toCharArray();
+            cs[0] -= 32;
+            propertyName += String.valueOf(cs);
         }
         return propertyName;
     }

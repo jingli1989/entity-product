@@ -32,4 +32,7 @@ public class FileConfig {
     /** 是否使用lombook注解 true 使用 false 不使用 */
     @Value("${use.lombok}")
     private Boolean useLomBok;
+    /** 是否使用序列化 true 使用 false 不使用 */
+    @Value("${use.serial}")
+    private Boolean useSerial;
 }

@@ -14,7 +14,7 @@ public class EntityBuildUtils {
      * @return 包路径
      */
     public static String buildPackage(FileConfig fileConfig){
-        String packagePath = "package "+fileConfig.getEntityPath();
+        String packagePath = "package "+fileConfig.getEntityPath()+";";
         return packagePath;
     }
 
@@ -25,7 +25,7 @@ public class EntityBuildUtils {
     public static String buildLombokImport(){
         String lombokImport =  "import lombok.Getter;\r\n"
                 +"import lombok.Setter;\r\n"
-                +"import lombok.ToString;\r\n";
+                +"import lombok.ToString;";
         return lombokImport;
     }
 
@@ -36,7 +36,7 @@ public class EntityBuildUtils {
     public static String buildAnnotation(){
         return "@Getter\n" +
                 "@Setter\n" +
-                "@ToString\n";
+                "@ToString";
     }
 
     /**
@@ -66,8 +66,8 @@ public class EntityBuildUtils {
      * @return 属性信息
      */
     public static String buildProperty(ColumnInfoDto columnInfoDto){
-        String propertyStr = "      private "+ JdbcTypeUtils.getJavaType(columnInfoDto.getDataType())+" " +
-                ""+ ColumnUtils.columnRecharnge(columnInfoDto.getColumnName())+";";
+        String propertyStr = "private "+ JdbcTypeUtils.getJavaType(columnInfoDto.getDataType()).getJava()+" " +
+                ""+ ColumnUtils.columnRecharge(columnInfoDto.getColumnName())+";";
         return propertyStr;
     }
 }

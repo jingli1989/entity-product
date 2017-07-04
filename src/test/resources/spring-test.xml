@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="com.lijing.entity" />
+	<context:component-scan base-package="com.xinyan.spider" />
 
 
 
@@ -20,11 +20,15 @@
 		<property name="ignoreResourceNotFound" value="false" />
 		<property name="locations">
 			<list>
-				<value>classpath:db-connection.properties</value>
-				<value>classpath:filepath.properties</value>
+				<value>file:/data/xinyan/spider-manager/mongo.properties</value>
+				<value>file:/data/xinyan/spider-manager/redis.properties</value>
+				<value>file:/data/xinyan/spider-manager/zk.properties</value>
 			</list>
 		</property>
 	</bean>
-	<import resource="spring-db.xml"/>
+	<import resource="spring-mongodb.xml" />
+	<!--<import resource="spring-redis.xml"/>-->
+	<!--<import resource="dubbo-provider.xml" />-->
+	<!--<import resource="dubbo-consumer.xml" />-->
 
 </beans>

@@ -47,7 +47,7 @@
 		<!-- <property name="timeout" value="30"/> -->
 	</bean>
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.xinyan.spider.dal.mapper"/>
+		<property name="basePackage" value="com.lijing.entity.dal.mapper"/>
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
 	</bean>
 </beans>

@@ -46,7 +46,7 @@ public class DbTableConfig {
         Map<String,List<String>> map = new HashMap<String, List<String>>();
         if(!StringUtils.isBlank(tableNames)){
             String spilt = static_spilt;
-            if(StringUtils.isBlank(spiltStr)){
+            if(!StringUtils.isBlank(spiltStr)){
                 spilt = spiltStr;
             }
             List<String> tableList = new ArrayList<String>();
@@ -69,7 +69,7 @@ public class DbTableConfig {
         if(StringUtils.isBlank(jdbcUrl)){
             throw new EntityServiceException("DB config error","db-connection.properties jdbc.url is null");
         }
-        String dbName = jdbcUrl.substring(jdbcUrl.lastIndexOf("/"));
+        String dbName = jdbcUrl.substring(jdbcUrl.lastIndexOf("/")+1);
         if(StringUtils.isBlank(dbName)){
             throw new EntityServiceException("DB config error","db-connection.properties jdbc.url is error ,can't get dbName");
         }

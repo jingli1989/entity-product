@@ -33,7 +33,7 @@ public class JdbcTypeUtils {
         if(typeModelMap==null){
             init();
         }
-        return typeModelMap.get(jdbcType);
+        return typeModelMap.get(jdbcType.toUpperCase());
     }
 
 }

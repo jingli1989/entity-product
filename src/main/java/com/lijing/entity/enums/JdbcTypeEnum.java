@@ -21,7 +21,7 @@ public enum JdbcTypeEnum {
     DOUBLE("DOUBLE","BigDecimal","java.math.BigDecimal"),
     FLOAT("FLOAT","BigDecimal","java.math.BigDecimal"),
     DECIMAL("DECIMAL","BigDecimal","java.math.BigDecimal"),
-    TIMESTAMP("TIMESTAMP","Date",""),
+    TIMESTAMP("TIMESTAMP","Date","java.util.Date"),
     ;
     /** jdbc类型*/
     private String jdbc;

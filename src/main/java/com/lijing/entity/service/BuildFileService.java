@@ -3,9 +3,11 @@ package com.lijing.entity.service;
 import com.lijing.entity.config.FileConfig;
 import com.lijing.entity.dal.dto.ColumnInfoDto;
 import com.lijing.entity.model.EntityInfo;
+import com.lijing.entity.model.FileInfo;
 import com.lijing.entity.model.JdbcTypeModel;
 import com.lijing.entity.util.ColumnUtils;
 import com.lijing.entity.util.EntityBuildUtils;
+import com.lijing.entity.util.FileUtils;
 import com.lijing.entity.util.JdbcTypeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,11 +48,15 @@ public class BuildFileService {
      * @param fileConfig 文件生成配置信息
      * @return 实体对象内容
      */
-    public String buildEntity(EntityInfo entityInfo,FileConfig fileConfig){
+    public FileInfo buildEntity(EntityInfo entityInfo,FileConfig fileConfig){
+        FileInfo fileInfo = new FileInfo();
         StringBuilder entity = new StringBuilder();
-        entity.append(EntityBuildUtils.buildPackage(fileConfig)).append("\r\n");
+        entity.append(EntityBuildUtils.buildPackage(fileConfig)).append("\r\n\n");
         if(fileConfig.getUseLomBok()) {
-            entity.append(EntityBuildUtils.buildLombokImport()).append("\r\n");
+            entity.append(EntityBuildUtils.buildLombokImport()).append("\r\n\n");
+        }
+        if(fileConfig.getUseSerial()){
+            entity.append("import java.io.Serializable;\n");
         }
         StringBuilder property = new StringBuilder();
         Map<String,String> importMap = new HashMap<String, String>();
@@ -62,15 +69,34 @@ public class BuildFileService {
         StringBuilder importJava = new StringBuilder();
         for (String importStr:importMap.values()){
             if(!StringUtils.isBlank(importStr)){
-                importJava.append(importStr).append(";\n");
+                importJava.append("import ").append(importStr).append(";\n");
             }
         }
-        entity.append(importJava).append("\r\n").append(EntityBuildUtils.classNote(entityInfo.getTableInfoDto().getTableComment())).append("\r\n");
-        entity.append(EntityBuildUtils.buildAnnotation()).append("\n");
-        entity.append("public class ").append(ColumnUtils.columnRecharnge(entityInfo.getTableInfoDto().getTableName())).append(" {\r\n");
+        entity.append(importJava).append("\r\n\n").append(EntityBuildUtils.classNote(entityInfo.getTableInfoDto().getTableComment())).append("\r\n");
+        if(fileConfig.getUseLomBok()){
+            entity.append(EntityBuildUtils.buildAnnotation()).append("\n");
+        }
+        String className = ColumnUtils.tableRecharge(entityInfo.getTableInfoDto().getTableName());
+        fileInfo.setFileName(className+".java");
+        entity.append("public class ").append(className);
+        if(fileConfig.getUseSerial()){
+            entity.append(" implements Serializable");
+        }
+        entity.append(" {\r\n");
         entity.append(property).append("\r\n}\r\n");
-        return entity.toString();
+        fileInfo.setFileContent(entity.toString());
+        return fileInfo;
     }
 
 
+    public void buildEntity(){
+        List<EntityInfo> entityInfoList = queryEntityService.getEntity();
+        for (EntityInfo entityInfo:entityInfoList){
+            FileInfo entityStr = buildEntity(entityInfo,fileConfig);
+            entityStr.setFilePath(fileConfig.getBasePath()+"/src/main/java/"+fileConfig.getEntityPath().replaceAll("\\.","/"));
+
+            log.info("生成结果:{}",entityStr);
+            FileUtils.createFile(entityStr);
+        }
+    }
 }
