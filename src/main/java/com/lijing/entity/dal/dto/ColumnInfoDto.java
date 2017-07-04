@@ -24,4 +24,14 @@ public class ColumnInfoDto implements Serializable{
     private String dataType;
     /** 字段最大长度 */
     private Integer maxLength;
+    /** 列索引类型 PRI 主键 */
+    private String columnKey;
+    /** 是否允许为空 YES 允许为空 NO 不允许为空 */
+    private String isNullAble;
+    /** 属性名称 */
+    private String propertyName;
+    /** 属性类型 */
+    private String propertyType;
+    /** 属性包路径 */
+    private String propertyPackage;
 }

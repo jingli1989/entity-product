@@ -49,7 +49,6 @@ public class ColumnUtils {
             if(c>=97&&c<=122){
                 stringBuffer.append(c);
             }else {
-
                 stringBuffer.append("_").append(c);
             }
         }

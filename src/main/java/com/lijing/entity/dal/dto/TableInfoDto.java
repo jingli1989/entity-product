@@ -20,4 +20,8 @@ public class TableInfoDto implements Serializable{
     private String tableName;
     /** 表注释 */
     private String tableComment;
+    /** 表名转换的类名 */
+    private String className;
+    /** 主键 */
+    private ColumnInfoDto priColumn;
 }

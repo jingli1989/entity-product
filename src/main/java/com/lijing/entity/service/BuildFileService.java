@@ -2,18 +2,18 @@ package com.lijing.entity.service;
 
 import com.lijing.entity.config.FileConfig;
 import com.lijing.entity.dal.dto.ColumnInfoDto;
+import com.lijing.entity.enums.JdbcKeyType;
 import com.lijing.entity.model.EntityInfo;
 import com.lijing.entity.model.FileInfo;
 import com.lijing.entity.model.JdbcTypeModel;
-import com.lijing.entity.util.ColumnUtils;
-import com.lijing.entity.util.EntityBuildUtils;
-import com.lijing.entity.util.FileUtils;
-import com.lijing.entity.util.JdbcTypeUtils;
+import com.lijing.entity.model.PropertyInfo;
+import com.lijing.entity.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +65,12 @@ public class BuildFileService {
             importMap.put(jdbcTypeModel.getJava(),jdbcTypeModel.getJavaPackage());
             property.append("    ").append(EntityBuildUtils.propertyNote(columnInfoDto.getColumnComment())).append("\n");
             property.append("    ").append(EntityBuildUtils.buildProperty(columnInfoDto)).append("\n");
+            columnInfoDto.setPropertyName(ColumnUtils.columnRecharge(columnInfoDto.getColumnName()));
+            columnInfoDto.setPropertyType(jdbcTypeModel.getJava());
+            columnInfoDto.setPropertyPackage(jdbcTypeModel.getJavaPackage());
+            if(JdbcKeyType.PRI.getCode().equals(columnInfoDto.getColumnKey())){
+                entityInfo.getTableInfoDto().setPriColumn(columnInfoDto);
+            }
         }
         StringBuilder importJava = new StringBuilder();
         for (String importStr:importMap.values()){
@@ -77,6 +83,7 @@ public class BuildFileService {
             entity.append(EntityBuildUtils.buildAnnotation()).append("\n");
         }
         String className = ColumnUtils.tableRecharge(entityInfo.getTableInfoDto().getTableName());
+        entityInfo.getTableInfoDto().setClassName(className);
         fileInfo.setFileName(className+".java");
         entity.append("public class ").append(className);
         if(fileConfig.getUseSerial()){
@@ -92,11 +99,14 @@ public class BuildFileService {
     public void buildEntity(){
         List<EntityInfo> entityInfoList = queryEntityService.getEntity();
         for (EntityInfo entityInfo:entityInfoList){
-            FileInfo entityStr = buildEntity(entityInfo,fileConfig);
-            entityStr.setFilePath(fileConfig.getBasePath()+"/src/main/java/"+fileConfig.getEntityPath().replaceAll("\\.","/"));
+            FileInfo fileInfo = buildEntity(entityInfo,fileConfig);
+            String javaFilePath = fileConfig.getBasePath()+"/src/main/java/"+fileConfig.getEntityPath().replaceAll("\\.","/");
+            log.info("生成结果:{}",fileInfo);
+            FileUtils.createFile(javaFilePath,entityInfo.getTableInfoDto().getClassName()+".java",fileInfo.getFileContent());
+            String mapperFilePath = fileConfig.getBasePath()+"/src/main/java/"+fileConfig.getMapperPath().replaceAll("\\.","/");
+            String fileContent = MapperBuildUtils.buildMapper(entityInfo,fileConfig);
+            FileUtils.createFile(mapperFilePath,entityInfo.getTableInfoDto().getClassName()+"Mapper.java",fileContent);
 
-            log.info("生成结果:{}",entityStr);
-            FileUtils.createFile(entityStr);
         }
     }
 }

@@ -15,12 +15,12 @@ import java.io.IOException;
 @Slf4j
 public class FileUtils {
 
-    public static void createFile(FileInfo fileInfo){
-        File fileDir = new File(fileInfo.getFilePath());
+    public static void createFile(String filePath,String fileName,String dataContent){
+        File fileDir = new File(filePath);
         if(fileDir.exists()){
             fileDir.mkdirs();
         }
-        writeFile(fileInfo.getFilePath()+"/"+fileInfo.getFileName(),fileInfo.getFileContent());
+        writeFile(filePath+"/"+fileName,dataContent);
     }
 
     public static void writeFile(String filePath,String fileContent){

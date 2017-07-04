@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface TableColumnInfoMapper {
 
-    /**TDirMobileHMapper.xml
+    /**
      * 根据数据库名称、表名获取表信息
      * @param dbName 数据库名称
      * @param tableName 表名

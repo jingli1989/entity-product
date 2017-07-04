@@ -8,10 +8,12 @@
   </resultMap>
 
   <resultMap id="ColumnResult" type="com.lijing.entity.dal.dto.ColumnInfoDto" >
-    <result column="column_name"              property="columnName"    jdbcType="VARCHAR" />
-    <result column="column_comment"           property="columnComment" jdbcType="VARCHAR" />
-    <result column="data_type"                property="dataType"      jdbcType="VARCHAR" />
-    <result column="character_maximum_length" property="maxLength"     jdbcType="BIGINT" />
+    <result column="COLUMN_NAME"              property="columnName"    jdbcType="VARCHAR" />
+    <result column="COLUMN_COMMENT"           property="columnComment" jdbcType="VARCHAR" />
+    <result column="DATA_TYPE"                property="dataType"      jdbcType="VARCHAR" />
+    <result column="COLUMN_KEY"               property="columnKey"     jdbcType="VARCHAR" />
+    <result column="IS_NULLABLE"              property="isNullAble"    jdbcType="VARCHAR" />
+    <result column="CHARACTER_MAXIMUM_LENGTH" property="maxLength"     jdbcType="BIGINT" />
   </resultMap>
 
   <!--查询表信息-->
@@ -27,7 +29,7 @@
   <!--查询表中字段信息-->
   <select id="selectColumn" resultMap="ColumnResult" parameterType="Map" >
     SELECT
-    column_name,column_comment,data_type,character_maximum_length
+    COLUMN_NAME,COLUMN_COMMENT,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,COLUMN_KEY,IS_NULLABLE
     FROM information_schema.columns
     WHERE TABLE_SCHEMA = #{tableSchema,jdbcType=VARCHAR}
     AND TABLE_NAME = #{tableName,jdbcType=VARCHAR}
