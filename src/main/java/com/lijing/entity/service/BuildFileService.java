@@ -107,6 +107,10 @@ public class BuildFileService {
             String fileContent = MapperBuildUtils.buildMapper(entityInfo,fileConfig);
             FileUtils.createFile(mapperFilePath,entityInfo.getTableInfoDto().getClassName()+"Mapper.java",fileContent);
 
+            String xmlFilePath = fileConfig.getBasePath()+"/src/main/"+fileConfig.getXmlPath();
+            String xmlFileContent = XmlBuildUtils.buildResultMap(entityInfo,fileConfig);
+            log.info("xml file path :{}",xmlFilePath);
+            FileUtils.createFile(xmlFilePath,entityInfo.getTableInfoDto().getClassName()+"Mapper.xml",xmlFileContent);
         }
     }
 }
